@@ -1,4 +1,6 @@
 const express =require('express');
+const { ObjectId } = require('mongodb');
+const DBcontion = require('./DBcontion');
 const {connectToDb,getDb}=require('./DBcontion');
 // init app&middleware
 const app =express();
@@ -9,7 +11,7 @@ connectToDb((err)=>{
             console.log("weclome Zeyad altaji and a Port is a 3000");
         })
         db=getDb();
-    }
+     }
 }) 
 
 
@@ -29,6 +31,22 @@ app.get("/employees",(req,res)=>{
 
     })
     // res.json({massage:"welecome to home page !!! "});
+})
+app.get('/employees/:id',(req,res)=>{
+    if(ObjectId.isValid(req.params.id)){
+        db.collection('employees')
+        .findOne({_id: ObjectId(req.params.id)})
+        .then(doc=>{
+            res.status(201).json(doc);
+    
+        })
+        .catch(err=>{
+            res.status(404).json({error:"not fond"})
+        })
+    }else{
+        res.status(404).json({error:"not fond"})
+
+    }
 })
 
     
