@@ -16,10 +16,10 @@ connectToDb((err)=>{
 // routing
 
 app.get("/employees",(req,res)=>{
-    let emp =[]
+    let employees =[]
     db.collection('employees')
     .find()
-    .sort({name:"zeyad"})
+    .sort({name:1})
     .forEach(phone =>employees.push(phone))
     .then(()=>{
         res.status(200).json(employees)
