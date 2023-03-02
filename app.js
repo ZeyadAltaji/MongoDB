@@ -17,7 +17,7 @@ connectToDb((err)=>{
 
 // routing
 
-app.get("/employees",(req,res)=>{
+app.get('/employees',(req,res)=>{
     let employees =[]
     db.collection('employees')
     .find()
@@ -48,6 +48,49 @@ app.get('/employees/:id',(req,res)=>{
 
     }
 })
+app.post('/employees',(req,res)=>{
+    const employee =req.body
+    db.collection('employees')
+    .insertOne(employee)
+    .then(result=>{
+        res.status(201).json(result);
+
+    }).catch(err=>{
+        res.status(500).json({error:"not sas"})
+    })
+})
 
     
+app.delete('/employees/:id',(req,res)=>{
+    if(ObjectId.isValid(req.params.id)){
+        db.collection('employees')
+        .deleteOne({_id: ObjectId(req.params.id)})
+        .then(result=>{
+            res.status(201).json(result);
     
+        })
+        .catch(err=>{
+            res.status(404).json({error:"not fond"})
+        })
+    }else{
+        res.status(404).json({error:"not fond"})
+
+    }
+})
+app.patch('/employees/:id',(req,res)=>{
+    const updete =req.body
+    if(ObjectId.isValid(req.params.id)){
+        db.collection('employees')
+        .updeteOne({_id: ObjectId(req.params.id)})
+        .then(result=>{
+            res.status(201).json(result);
+    
+        })
+        .catch(err=>{
+            res.status(404).json({error:"not fond"})
+        })
+    }else{
+        res.status(404).json({error:"not fond"})
+
+    }
+})
